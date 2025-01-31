@@ -21,13 +21,12 @@ const userResolver = {
     },
 
     updateUser: async (_: unknown, args: User, context: any) => {
-      // await withAuth([UserRole.ADMIN], context.auth);
+      await withAuth([UserRole.ADMIN], context.auth);
       return usersService.updateUserIntoDB(args);
     },
 
-    deleteUser: async (_: unknown, { id }: { id: string }) => {
-      await prisma.user.delete({ where: { id } });
-      return true;
+    deleteUser: async (_: unknown, { id }: { id: string }, context: User) => {
+      return await usersService.deleteUserIntoDB(id, context.id);
     },
   },
 };

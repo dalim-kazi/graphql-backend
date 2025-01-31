@@ -10,19 +10,18 @@ const userTypeDef = gql`
     createdAt: String!
     updatedAt: String!
   }
-
-  type SingleUser {
-    message: String!
-    success: Boolean!
-    user: User!
-  }
-
   type Meta {
     limit: Int!
     searchQuery: String!
     totalPages: Int!
     totalItems: Int!
     currentPage: Int!
+  }
+
+  type SingleUser {
+    message: String!
+    success: Boolean!
+    user: User!
   }
 
   type GetUsers {
@@ -35,6 +34,11 @@ const userTypeDef = gql`
     message: String!
     success: Boolean!
     user: User!
+  }
+
+  type deleteUser {
+    message: String!
+    success: Boolean!
   }
 
   input UserFilter {
@@ -57,7 +61,7 @@ const userTypeDef = gql`
   type Mutation {
     createUser(name: String!, email: String!, password: String!): User
     updateUser(id: String!, name: String): UpsatedUser
-    deleteUser(id: String!): Boolean
+    deleteUser(id: String!): deleteUser
   }
 `;
 export default userTypeDef;

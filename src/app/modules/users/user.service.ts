@@ -91,21 +91,40 @@ const getUsersIntoDB = async (args: IPaginationOptions) => {
 };
 
 const updateUserIntoDB = async (arg: User) => {
-  const { id, ...userData } = arg;
-  const existingUser = await getSingleUserIntoDB(id);
-  if (!existingUser) {
-    throw new ApiError(404, "user not found for edit user");
-  }
-  const updatedUser = await prisma.user.update({
-    where: { id },
-    data: userData,
+  return catchAsync(async () => {
+    const { id, ...userData } = arg;
+    const existingUser = await getSingleUserIntoDB(id);
+    if (!existingUser) {
+      throw new ApiError(404, "user not found for edit user");
+    }
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: userData,
+    });
+
+    const { password, ...sanitizedUser } = updatedUser;
+
+    return {
+      user: sanitizedUser,
+      message: "User updated successfully.",
+      success: true,
+    };
   });
+};
 
-  const { password, ...sanitizedUser } = updatedUser;
-
+const deleteUserIntoDB = async (userId: string, loggedId: string) => {
+  if (userId === loggedId) {
+    throw new ApiError(403, "You can't delete your own account!");
+  }
+  const existingUser = await getSingleUserIntoDB(userId);
+  if (!existingUser) {
+    throw new ApiError(404, "user not found for delete this");
+  }
+  await prisma.user.delete({
+    where: { id: userId },
+  });
   return {
-    user: sanitizedUser,
-    message: "User updated successfully.",
+    message: "User deleted successfully.",
     success: true,
   };
 };
@@ -115,4 +134,5 @@ export const usersService = {
   getSingleUserIntoDB,
   getUsersIntoDB,
   updateUserIntoDB,
+  deleteUserIntoDB,
 };
