@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express";
+import { gql } from "apollo-server";
 
 const userTypeDef = gql`
   type User {
@@ -36,6 +36,11 @@ const userTypeDef = gql`
     user: User!
   }
 
+  type CreatedUser {
+    message: String!
+    success: Boolean!
+    user: User!
+  }
   type deleteUser {
     message: String!
     success: Boolean!
@@ -59,7 +64,13 @@ const userTypeDef = gql`
   }
 
   type Mutation {
-    createUser(name: String!, email: String!, password: String!): User
+    createUser(
+      name: String!
+      email: String!
+      password: String!
+      role: String
+      status: String
+    ): CreatedUser
     updateUser(id: String!, name: String): UpsatedUser
     deleteUser(id: String!): deleteUser
   }

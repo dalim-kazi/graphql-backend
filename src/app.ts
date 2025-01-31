@@ -14,7 +14,7 @@ const server = new ApolloServer({
     };
   },
   context: ({ req }) => ({
-    auth: req.headers.authorization || "",
+    token: req.headers.authorization || "",
   }),
   formatResponse: (response: any) => {
     if (response.errors && response.errors.length > 0) {
