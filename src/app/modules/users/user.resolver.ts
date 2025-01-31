@@ -2,11 +2,17 @@ import { User, UserRole } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import { usersService } from "./user.service";
 import { withAuth } from "../../middlewares/auth";
+import { IPaginationOptions } from "../../interfaces/paginations";
+
 const userResolver = {
   Query: {
-    users: async () => await prisma.user.findMany(),
-    user: async (_: unknown, { id }: { id: string }) =>
-      await prisma.user.findUnique({ where: { id } }),
+    users: async (_: unknown, args: IPaginationOptions) => {
+      return await usersService.getUsersIntoDB(args);
+    },
+
+    user: async (_: unknown, { id }: { id: string }) => {
+      return await usersService.getSingleUserIntoDB(id);
+    },
   },
   Mutation: {
     createUser: async (_: unknown, user: User, context: any) => {
@@ -14,15 +20,11 @@ const userResolver = {
       return await usersService.crerateUser(user);
     },
 
-    updateUser: async (
-      _: any,
-      { id, name, email }: { id: string; name?: string; email?: string }
-    ) => {
-      return await prisma.user.update({
-        where: { id },
-        data: { name, email },
-      });
+    updateUser: async (_: unknown, args: User, context: any) => {
+      // await withAuth([UserRole.ADMIN], context.auth);
+      return usersService.updateUserIntoDB(args);
     },
+
     deleteUser: async (_: unknown, { id }: { id: string }) => {
       await prisma.user.delete({ where: { id } });
       return true;
