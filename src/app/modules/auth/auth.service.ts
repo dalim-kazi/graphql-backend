@@ -115,7 +115,7 @@ const getProfileFromDB = async (userId: string) => {
 
   const { password, ...sanitizedUser } = user;
   return sanitizedUser;
-};
+}
 
 // ✅ Update Profile
 const updateProfileIntoDB = async (userId: string, userData: any) => {

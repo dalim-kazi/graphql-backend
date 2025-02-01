@@ -11,6 +11,7 @@ const authTypeDef = gql`
   type ForgotPasswordOtpResponse {
     message: String!
     success: Boolean!
+    otp: String!
   }
 
   type VerifyOtpResponse {
