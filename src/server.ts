@@ -1,6 +1,7 @@
-import server from "./app";
+import app from "./app";
 import envConfig from "./config/env.config";
 
-server.listen(envConfig.port).then(({ url }) => {
-  console.log(`🚀 Server ready at ${url}`);
+// Start the server
+app.listen(envConfig.port, () => {
+  console.log(`🚀 Server ready at http://localhost:${envConfig.port}/graphql`);
 });

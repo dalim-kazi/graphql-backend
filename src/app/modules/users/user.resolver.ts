@@ -8,7 +8,7 @@ const userResolver = {
   Query: {
     users: catchAsync(
       async (_: unknown, args: IPaginationOptions, context: any) => {
-        await withAuth([UserRole.ADMIN], context.token);
+        await withAuth([UserRole.USER], context.token);
         return await usersService.getUsersIntoDB(args);
       }
     ),
